@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up | BITgigs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Animation */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <div class="min-h-screen flex flex-col md:flex-row bg-white">
+        
+        <!-- Left Side: Branding & Benefits (Visible on Desktop) -->
+        <div class="hidden md:flex w-1/2 bg-slate-900 text-white flex-col justify-center px-16 relative overflow-hidden">
+            <!-- Background Pattern -->
+            <div class="absolute top-0 left-0 w-full h-full opacity-20">
+                <i class="fa-solid fa-users text-[400px] absolute -bottom-32 -left-32 text-indigo-500"></i>
+            </div>
+            
+            <div class="relative z-10">
+                <div class="mb-8">
+                    <div class="inline-block bg-indigo-600 text-white px-3 py-1 rounded-lg text-sm font-bold mb-4">
+                        <i class="fa-solid fa-shield-halved mr-2"></i>Verified Students Only
+                    </div>
+                    <h1 class="text-5xl font-bold mb-6 leading-tight">Join the <span class="text-indigo-400">Community</span></h1>
+                    <p class="text-slate-400 text-lg">Create your profile to start earning or hiring. We require your college email to ensure safety and trust within the campus.</p>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-full bg-indigo-900 flex items-center justify-center text-indigo-400 shrink-0">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg">Earn Pocket Money</h4>
+                            <p class="text-slate-400 text-sm">Pick up gigs that fit your schedule.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-full bg-indigo-900 flex items-center justify-center text-indigo-400 shrink-0">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg">Get Help Instantly</h4>
+                            <p class="text-slate-400 text-sm">Connect with batchmates who can help.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side: Sign Up Form -->
+        <div class="w-full md:w-1/2 flex items-center justify-center p-8 overflow-y-auto">
+            <div class="w-full max-w-md fade-in">
+                
+                <!-- Mobile Header -->
+                <div class="flex items-center gap-2 mb-8 justify-center md:justify-start">
+                    <div class="bg-indigo-600 text-white p-2 rounded-lg">
+                        <i class="fa-solid fa-graduation-cap text-xl"></i>
+                    </div>
+                    <span class="font-bold text-2xl text-indigo-900 tracking-tight">BITgigs</span>
+                </div>
+
+                <h2 class="text-3xl font-bold text-slate-900 mb-2">Create Account</h2>
+                <p class="text-slate-500 mb-8">Use your official college email ID.</p>
+
+                <form onsubmit="handleSignup(event)" class="space-y-4">
+                    <!-- Name Fields -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">First Name</label>
+                            <input id="first-name" type="text" placeholder="Sumanth" class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Last Name</label>
+                            <input id="last-name" type="text" placeholder="Halyal" class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition" required>
+                        </div>
+                    </div>
+
+                    <!-- College ID Details -->
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">College Email ID</label>
+                        <div class="relative">
+                            <input id="college-email" type="email" placeholder="namestudentBIT@gmail" class="w-full border border-slate-300 rounded-xl p-3 pl-10 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition" required>
+                            <i class="fa-solid fa-envelope absolute left-3.5 top-3.5 text-slate-400"></i>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-1 ml-1">Must be a valid @gmail.com or college domain.</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Contact Number</label>
+                        <input id="Phone" type="text" placeholder="XXX-XXX-XXXX" class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition" required>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">USN</label>
+                        <input id="USN" type="text" placeholder="1BI21CS..." class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Branch</label>
+                        <input id="Branch" type="text" placeholder="ISE" class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Year</label>
+                        <input id="Year" type="text" placeholder="1st year" class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Skill 1</label>
+                        <input id="interest_1" type="text" class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Skill 2</label>
+                        <input id="interest_2" type="text"  class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Skill 3</label>
+                        <input id="interest_3" type="text"  class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition" required>
+                    </div>
+                    
+                    <!-- Password -->
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Password</label>
+                        <input type="password" id="password" placeholder="Create a password" class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition" required>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Confirm Password</label>
+                        <input type="password" id="confirm-password" placeholder="Repeat password" class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition" required>
+                    </div>
+
+                    <!-- Terms -->
+                    <div class="flex items-start gap-2 mt-2">
+                        <input type="checkbox" id="terms" class="mt-1 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500" required>
+                        <label for="terms" class="text-sm text-slate-600">
+                            I agree to the <a href="#" class="text-indigo-600 hover:underline">Terms of Service</a> and confirm I am a current student.
+                        </label>
+                    </div>
+
+                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl shadow-lg shadow-indigo-200 transition duration-200 mt-4">
+                        Sign Up
+                    </button>
+                </form>
+
+                <p class="text-center text-slate-500 text-sm mt-8">
+                    Already have an account? <a href="index.html" class="text-indigo-600 font-bold hover:underline">Log in</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed top-5 right-5 bg-green-600 text-white px-6 py-4 rounded-xl shadow-2xl transform -translate-y-24 transition-transform duration-300 flex items-center gap-3 z-50">
+        <i class="fa-solid fa-envelope-circle-check text-xl"></i>
+        <div>
+            <h4 class="font-bold">Verification Sent!</h4>
+            <p class="text-sm text-green-100">Please check your college email.</p>
+        </div>
+    </div>
+
+    <script>
+        function handleSignup(e) {
+            e.preventDefault();
+            const pass = document.getElementById('password').value;
+            const confirm = document.getElementById('confirm-password').value;
+
+            if (pass !== confirm) {
+                alert("Passwords do not match!");
+                return;
+            }
+
+            const DataOfUser = {
+
+                firstName: document.getElementById('first-name').value,
+                lastName: document.getElementById('last-name').value,
+                email: document.getElementById('college-email').value,
+                phone: document.getElementById('Phone').value,
+                usn: document.getElementById('USN').value,
+                branch: document.getElementById('Branch').value,
+                year: document.getElementById('Year').value,
+                //Store skills as an array so we can loop through them if needed
+                skills: [
+                    document.getElementById('interest_1').value,
+                    document.getElementById('interest_2').value,
+                    document.getElementById('interest_3').value 
+                ]
+            };
+
+            //Save to a local storage
+            localStorage.setItem('bitgigs_user', JSON.stringify(DataOfUser));
+
+            // Show Success Toast
+            const toast = document.getElementById('toast');
+            toast.classList.remove('-translate-y-24');
+            
+            setTimeout(() => {
+                toast.classList.add('-translate-y-24');
+                // Redirect to Login after a delay
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1000);
+            }, 2500);
+        }
+    </script>
+</body>
+</html>
+
+
