@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BITGigs | Hire Your Classmates</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* Animations */
+        .fade-in { animation: fadeIn 0.5s ease-in forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script>
+        // Initialize Supabase Client globally
+        const SUPABASE_URL = 'https://jkehvjhantzmcchnijba.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprZWh2amhhbnR6bWNjaG5pamJhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM3NDE4NjAsImV4cCI6MjA3OTMxNzg2MH0.YjobDyASwAT1B22Bfb4YjVU-RVTuBEyTZPyP1xISgSc';
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    </script>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <div id="login-view" class="min-h-screen flex flex-col md:flex-row bg-white">
+        <div class="hidden md:flex w-1/2 bg-indigo-600 text-white flex-col justify-center px-16 relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-full opacity-10">
+                <i class="fa-solid fa-graduation-cap text-[400px] absolute -bottom-20 -right-20"></i>
+            </div>
+            <div class="relative z-10">
+                <div class="inline-block bg-indigo-500 bg-opacity-50 border border-indigo-400 px-4 py-1 rounded-full text-sm font-semibold mb-6">
+                    📍 Bangalore Institute of Technology Network
+                </div>
+                <h1 class="text-5xl font-bold mb-6 leading-tight">Work with peers from <br>BIT Bangalore</h1>
+                <p class="text-indigo-100 text-lg mb-8">Whether you need a project partner or extra pocket money, BITgigs connects you securely with verified students nearby.</p>
+            </div>
+        </div>
+
+        <div class="w-full md:w-1/2 flex items-center justify-center p-8">
+            <div class="w-full max-w-md">
+                <div class="flex items-center gap-2 mb-8 justify-center md:justify-start">
+                    <div class="bg-indigo-600 text-white p-2 rounded-lg">
+                        <i class="fa-solid fa-graduation-cap text-xl"></i>
+                    </div>
+                    <span class="font-bold text-2xl text-indigo-900 tracking-tight">BITgigs</span>
+                </div>
+
+                <h2 class="text-3xl font-bold text-slate-900 mb-2">Welcome Back</h2>
+                <p class="text-slate-500 mb-8">Please enter your details to sign in.</p>
+
+                <div class="bg-slate-100 p-1 rounded-xl flex mb-8">
+                    <button onclick="switchRole('employee')" id="btn-employee" class="flex-1 py-3 rounded-lg text-sm font-bold shadow-sm bg-white text-indigo-600 transition-all duration-200">I want to Work</button>
+                    <button onclick="switchRole('employer')" id="btn-employer" class="flex-1 py-3 rounded-lg text-sm font-bold text-slate-500 hover:text-slate-700 transition-all duration-200">I want to Hire</button>
+                </div>
+
+                <form onsubmit="handleLogin(event)" class="space-y-5">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">College Email</label>
+                        <input id="email" type="email" placeholder="name@student.vtu.ac.in" class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-indigo-500 outline-none" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">Password</label>
+                        <input id="password" type="password" placeholder="••••••••" class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-indigo-500 outline-none" required>
+                    </div>
+                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl shadow-lg transition duration-200">Sign In</button>
+                </form>
+
+                <p class="text-center text-slate-500 text-sm mt-8">
+                    Don't have an account? <a href="sign-up.html" class="text-indigo-600 font-bold hover:underline">Sign up</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div id="dashboard-view" class="hidden">
+        <nav class="fixed w-full z-50 glass-effect border-b border-slate-200 shadow-sm">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16 items-center">
+                    <div class="flex items-center gap-2 cursor-pointer" onclick="window.scrollTo(0,0)">
+                        <div class="bg-indigo-600 text-white p-2 rounded-lg">
+                            <i class="fa-solid fa-graduation-cap text-xl"></i>
+                        </div>
+                        <span class="font-bold text-xl text-indigo-900 tracking-tight">BITgigs</span>
+                    </div>
+                    <div class="hidden md:flex items-center space-x-8">
+                        <a href="how-it-works.html" class="text-slate-600 hover:text-indigo-600 font-medium transition">How it Works</a>
+                        <a href="#browse-jobs" class="text-slate-600 hover:text-indigo-600 font-medium transition">Find Work</a>
+                        <button onclick="openModal('jobModal')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-full font-semibold transition shadow-lg">Post a Job</button>
+                        <a href="profile.html" class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 font-bold text-xs border border-indigo-200 cursor-pointer hover:bg-indigo-200 transition">ME</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <header class="pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+            <div class="max-w-7xl mx-auto text-center">
+                <div class="inline-block bg-indigo-100 text-indigo-700 px-4 py-1 rounded-full text-sm font-semibold mb-6">
+                    🚀 Exclusive to BIT Bangalore
+                </div>
+                <h1 class="text-4xl md:text-6xl font-bold text-slate-900 mb-6 tracking-tight">Hire your batchmates.<br><span class="text-indigo-600">Get stuff done.</span></h1>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="#browse-jobs" class="px-8 py-4 bg-indigo-600 text-white rounded-xl font-bold shadow-xl hover:bg-indigo-700 transition">Find a Gig</a>
+                    <button onclick="openModal('jobModal')" class="px-8 py-4 bg-white text-indigo-600 border-2 border-indigo-100 rounded-xl font-bold hover:bg-indigo-50 transition">Hire Someone</button>
+                </div>
+            </div>
+        </header>
+
+        <section id="browse-jobs" class="py-16 px-4 max-w-7xl mx-auto">
+            <div class="flex justify-between items-center mb-10">
+                <h2 class="text-3xl font-bold text-slate-900">Latest Opportunities</h2>
+                <button onclick="clearAllJobs()" class="text-sm text-red-500 hover:text-red-700 font-semibold">Reset Demo Data</button>
+            </div>
+
+            <div id="jobs-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                </div>
+        </section>
+
+        <footer class="bg-slate-900 text-slate-400 py-12">
+            <div class="max-w-7xl mx-auto px-4 text-center text-sm">
+                &copy; 2025 BITgigs. All rights reserved.
+            </div>
+        </footer>
+    </div>
+
+    <div id="jobModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center backdrop-blur-sm opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg m-4 overflow-hidden transform scale-95 transition-transform duration-300 modal-content">
+            <div class="bg-indigo-600 p-4 flex justify-between items-center">
+                <h3 id="modalTitle" class="text-white font-bold text-lg">Post a New Gig</h3>
+                <button onclick="closeModal('jobModal')" class="text-white hover:bg-indigo-700 rounded-full w-8 h-8 flex items-center justify-center transition"><i class="fa-solid fa-times"></i></button>
+            </div>
+            <div class="p-6">
+                <form onsubmit="submitJob(event)">
+                    <input type="hidden" id="editJobId"> 
+                    
+                    <div class="mb-4">
+                        <label class="block text-slate-700 font-medium mb-2">Job Title</label>
+                        <input id="JobTitle" type="text" class="w-full border border-slate-300 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="e.g., Need help moving" required>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-slate-700 font-medium mb-2">Category</label>
+                            <select id="JobCategory" class="w-full border border-slate-300 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 outline-none">
+                                <option value="Tutoring">Tutoring</option>
+                                <option value="Moving">Moving</option>
+                                <option value="Design">Design</option>
+                                <option value="Coding">Coding</option>
+                                <option value="Ride">Ride Share</option>
+                                <option value="Event">Event</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-slate-700 font-medium mb-2">Budget</label>
+                            <input id="budget" type="text" class="w-full border border-slate-300 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="e.g., ₹500 Flat">
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-slate-700 font-medium mb-2">Your Name</label>
+                            <input id="contactName" type="text" class="w-full border border-slate-300 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="Arjun R." required>
+                        </div>
+                        <div>
+                            <label class="block text-slate-700 font-medium mb-2">Contact Phone</label>
+                            <input id="contactPhone" type="text" class="w-full border border-slate-300 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="98765xxxxx" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="block text-slate-700 font-medium mb-2">Description</label>
+                        <textarea id="Description" class="w-full border border-slate-300 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 outline-none" rows="3" placeholder="Describe details..."></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-lg shadow-lg transition">Save Job</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="infoModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center backdrop-blur-sm opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md m-4 overflow-hidden transform scale-95 transition-transform duration-300 modal-content">
+            
+            <div id="infoModalHeader" class="bg-indigo-600 p-6 text-center transition-colors duration-300">
+                <div id="infoIcon" class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-md">
+                    <i class="fa-solid fa-user-circle text-3xl text-indigo-600"></i>
+                </div>
+                <h3 id="infoTitle" class="text-white font-bold text-2xl">Contact Details</h3>
+                <p id="infoSubtitle" class="text-indigo-100">Reach out to discuss the job.</p>
+            </div>
+
+            <div class="p-6">
+                <div class="bg-slate-50 rounded-xl p-4 border border-slate-200 mb-6">
+                    <h4 id="infoJobTitle" class="font-bold text-lg text-slate-900 mb-1">Job Title Here</h4>
+                    <p id="infoJobBudget" class="text-indigo-600 font-bold text-sm mb-4">₹500</p>
+                    
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600"><i class="fa-solid fa-user"></i></div>
+                            <div>
+                                <p class="text-xs text-slate-500 uppercase font-bold">Hirer Name</p>
+                                <p id="infoName" class="text-slate-900 font-medium">Name</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600"><i class="fa-solid fa-phone"></i></div>
+                            <div>
+                                <p class="text-xs text-slate-500 uppercase font-bold">Phone Number</p>
+                                <p id="infoPhone" class="text-slate-900 font-medium">1234567890</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="closeModal('infoModal')" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-lg transition">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="fixed bottom-5 right-5 bg-green-600 text-white px-6 py-4 rounded-xl shadow-2xl transform translate-y-20 transition-transform duration-300 flex items-center gap-3 z-50">
+        <i class="fa-solid fa-circle-check text-xl"></i>
+        <div>
+            <h4 class="font-bold">Success!</h4>
+            <p class="text-sm text-green-100" id="toastMsg">Operation completed.</p>
+        </div>
+    </div>
+
+    <script>
+    // --- INITIALIZATION ---
+    let currentUser = null;
+
+    // Run on load
+    window.onload = async function() {
+        // Check current session
+        const { data: { session } } = await supabase.auth.getSession();
+        
+        if (session) {
+            currentUser = session.user;
+            handleSessionActive();
+        } else {
+            document.getElementById('login-view').classList.remove('hidden');
+            document.getElementById('dashboard-view').classList.add('hidden');
+        }
+
+        // Listen for auth changes (Login/Logout)
+        supabase.auth.onAuthStateChange((event, session) => {
+            if (event === 'SIGNED_IN') {
+                currentUser = session.user;
+                handleSessionActive();
+            } else if (event === 'SIGNED_OUT') {
+                window.location.reload();
+            }
+        });
+
+        // Load jobs regardless of login status (if you want public to see jobs)
+        // But based on your UI, we load them after login
+    };
+
+    async function handleSessionActive() {
+        document.getElementById('login-view').classList.add('hidden');
+        document.getElementById('dashboard-view').classList.remove('hidden');
+        
+        // Prefill forms with profile data
+        const { data: profile } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', currentUser.id)
+            .single();
+            
+        if (profile) {
+            document.getElementById('email').value = profile.email; 
+            document.getElementById('contactName').value = profile.first_name;
+            document.getElementById('contactPhone').value = profile.phone;
+        }
+        
+        renderJobs();
+    }
+
+    // --- LOGIN LOGIC ---
+    async function handleLogin(e) {
+        e.preventDefault();
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const btn = e.target.querySelector('button');
+        btn.innerText = "Signing in...";
+
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email: email,
+            password: password
+        });
+
+        if (error) {
+            alert(error.message);
+            btn.innerText = "Sign In";
+        }
+        // onAuthStateChange will handle the redirection
+    }
+
+    function switchRole(role) {
+        // Visual toggle only
+        const btnEmployee = document.getElementById('btn-employee');
+        const btnEmployer = document.getElementById('btn-employer');
+        if (role === 'employee') {
+            btnEmployee.className = "flex-1 py-3 rounded-lg text-sm font-bold shadow-sm bg-white text-indigo-600 transition-all duration-200";
+            btnEmployer.className = "flex-1 py-3 rounded-lg text-sm font-bold text-slate-500 hover:text-slate-700 transition-all duration-200";
+        } else {
+            btnEmployer.className = "flex-1 py-3 rounded-lg text-sm font-bold shadow-sm bg-white text-indigo-600 transition-all duration-200";
+            btnEmployee.className = "flex-1 py-3 rounded-lg text-sm font-bold text-slate-500 hover:text-slate-700 transition-all duration-200";
+        }
+    }
+
+    // --- JOB MANAGEMENT (CRUD) ---
+    async function renderJobs() {
+        const container = document.getElementById('jobs-container');
+        container.innerHTML = '<p class="text-center col-span-3">Loading gigs...</p>';
+
+        const { data: jobs, error } = await supabase
+            .from('jobs')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        if (error) {
+            console.error(error);
+            return;
+        }
+
+        container.innerHTML = '';
+        if(jobs.length === 0) {
+            container.innerHTML = '<p class="text-slate-500 col-span-3 text-center">No active jobs. Be the first to post!</p>';
+            return;
+        }
+
+        jobs.forEach(job => {
+            const colorMap = { 'Tutoring': 'green', 'Moving': 'blue', 'Design': 'purple', 'Ride': 'orange', 'Coding': 'indigo', 'Event': 'red' };
+            const color = colorMap[job.category] || 'indigo';
+            
+            // Only show edit/delete if the current user created the job
+            const isOwner = currentUser && job.user_id === currentUser.id;
+            const actionButtons = isOwner ? `
+                <div class="flex gap-2 opacity-0 group-hover:opacity-100 transition">
+                    <button onclick="deleteJob(${job.id})" class="text-slate-400 hover:text-red-600"><i class="fa-solid fa-trash"></i></button>
+                </div>` : '';
+
+            const html = `
+            <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition group relative overflow-hidden" id="job-card-${job.id}">
+                <div class="absolute top-0 left-0 w-1 h-full bg-${color}-500"></div>
+                
+                <div class="flex justify-between items-start mb-4">
+                    <span class="bg-${color}-100 text-${color}-700 text-xs font-bold px-2 py-1 rounded uppercase">${job.category}</span>
+                    ${actionButtons}
+                </div>
+                
+                <h3 onclick="showContactInfo(${job.id})" class="text-xl font-bold text-slate-900 mb-2 hover:text-indigo-600 hover:underline cursor-pointer truncate">
+                    ${job.title}
+                </h3>
+
+                <p class="text-slate-600 text-sm mb-4 line-clamp-2 min-h-[2.5rem]">${job.description}</p>
+                
+                <div class="flex items-center justify-between mt-auto pt-4 border-t border-slate-100">
+                    <div class="text-right w-full">
+                        <span class="block text-lg font-bold text-slate-900">${job.budget}</span>
+                    </div>
+                </div>
+                <button id="btn-apply-${job.id}" onclick="handleApply(${job.id})" class="w-full mt-4 py-2 border border-indigo-600 text-indigo-600 rounded-lg font-semibold hover:bg-indigo-600 hover:text-white transition">Apply Now</button>
+            </div>`;
+            container.innerHTML += html;
+        });
+        
+        // Store jobs in memory for modals
+        window.currentJobs = jobs; 
+    }
+
+    async function submitJob(e) {
+        e.preventDefault();
+        
+        const title = document.getElementById('JobTitle').value;
+        const category = document.getElementById('JobCategory').value;
+        const budget = document.getElementById('budget').value;
+        const description = document.getElementById('Description').value;
+        const contactName = document.getElementById('contactName').value;
+        const contactPhone = document.getElementById('contactPhone').value;
+        const editId = document.getElementById('editJobId').value; // Not fully implemented in this simplified version
+
+        const { error } = await supabase
+            .from('jobs')
+            .insert([{
+                user_id: currentUser.id,
+                title,
+                category,
+                budget,
+                description,
+                contact_name: contactName,
+                contact_phone: contactPhone
+            }]);
+
+        if (error) {
+            alert("Error posting job: " + error.message);
+        } else {
+            showToast("Job posted successfully!");
+            closeModal('jobModal');
+            renderJobs(); // Refresh list
+        }
+    }
+
+    async function deleteJob(id) {
+        if(confirm("Are you sure?")) {
+            const { error } = await supabase.from('jobs').delete().eq('id', id);
+            if(!error) {
+                showToast("Job deleted.");
+                renderJobs();
+            } else {
+                alert(error.message);
+            }
+        }
+    }
+
+    function getJobById(id) {
+        return window.currentJobs.find(j => j.id === id);
+    }
+
+    function populateInfoModal(job) {
+        if(!job) return;
+        document.getElementById('infoJobTitle').innerText = job.title;
+        document.getElementById('infoJobBudget').innerText = job.budget;
+        document.getElementById('infoName').innerText = job.contact_name || "Student";
+        document.getElementById('infoPhone').innerText = job.contact_phone || "Hidden";
+    }
+
+    function showContactInfo(id) {
+        const job = getJobById(id);
+        if(job) {
+            populateInfoModal(job);
+            const header = document.getElementById('infoModalHeader');
+            header.classList.remove('bg-green-600');
+            header.classList.add('bg-indigo-600');
+            document.getElementById('infoIcon').innerHTML = '<i class="fa-solid fa-address-card text-3xl text-indigo-600"></i>';
+            document.getElementById('infoTitle').innerText = "Contact Details";
+            document.getElementById('infoSubtitle').innerText = "Reach out to discuss the job.";
+            openModal('infoModal');
+        }
+    }
+
+    function handleApply(id) {
+        const btn = document.getElementById(`btn-apply-${id}`);
+        btn.innerText = "Applied";
+        btn.className = "w-full mt-4 py-2 bg-green-100 text-green-700 border border-transparent rounded-lg font-semibold cursor-default";
+        btn.disabled = true;
+
+        const job = getJobById(id);
+        if(job) {
+            populateInfoModal(job);
+            const header = document.getElementById('infoModalHeader');
+            header.classList.remove('bg-indigo-600');
+            header.classList.add('bg-green-600');
+            document.getElementById('infoIcon').innerHTML = '<i class="fa-solid fa-check text-3xl text-green-600"></i>';
+            document.getElementById('infoTitle').innerText = "Application Sent!";
+            document.getElementById('infoSubtitle').innerText = "Use the details below to contact the hirer.";
+            openModal('infoModal');
+        }
+    }
+
+    // --- MODAL UTILITIES ---
+    function openModal(modalId) {
+        const modal = document.getElementById(modalId);
+        const content = modal.querySelector('.modal-content');
+        modal.classList.remove('hidden');
+        setTimeout(() => {
+            modal.classList.remove('opacity-0');
+            content.classList.remove('scale-95');
+            content.classList.add('scale-100');
+        }, 10);
+    }
+
+    function closeModal(modalId) {
+        const modal = document.getElementById(modalId);
+        const content = modal.querySelector('.modal-content');
+        modal.classList.add('opacity-0');
+        content.classList.remove('scale-100');
+        content.classList.add('scale-95');
+        setTimeout(() => {
+            modal.classList.add('hidden');
+            if(modalId === 'jobModal') {
+                document.querySelector('form').reset();
+                document.getElementById('editJobId').value = "";
+            }
+        }, 300);
+    }
+    
+    function clearAllJobs() {
+        // Disabled for real DB
+        alert("This feature is disabled in production mode.");
+    }
+
+    function showToast(msg) {
+        const toast = document.getElementById('toast');
+        document.getElementById('toastMsg').innerText = msg;
+        toast.classList.remove('translate-y-20');
+        setTimeout(() => toast.classList.add('translate-y-20'), 3000);
+    }
+    </script>
+</body>
+</html>

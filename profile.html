@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | BITgigs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        
+        /* Animations */
+        .fade-in { animation: fadeIn 0.3s ease-in forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script>
+        // Initialize Supabase Client globally
+        const SUPABASE_URL = 'https://jkehvjhantzmcchnijba.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprZWh2amhhbnR6bWNjaG5pamJhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM3NDE4NjAsImV4cCI6MjA3OTMxNzg2MH0.YjobDyASwAT1B22Bfb4YjVU-RVTuBEyTZPyP1xISgSc';
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    </script>
+</head>
+<body class="text-slate-800">
+
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-2">
+                    <div class="bg-indigo-600 text-white p-2 rounded-lg">
+                        <i class="fa-solid fa-graduation-cap text-xl"></i>
+                    </div>
+                    <span class="font-bold text-xl text-indigo-900 tracking-tight">BITgigs</span>
+                </div>
+                
+                <a href="index.html" class="text-slate-600 hover:text-indigo-600 font-medium flex items-center gap-2 transition">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-5xl mx-auto px-4 py-10">
+        
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mb-8 relative">
+            <div class="h-32 bg-gradient-to-r from-indigo-500 to-purple-600"></div>
+            
+            <div class="px-8 pb-8 relative">
+                <div class="absolute -top-16 left-8">
+                    <div class="w-32 h-32 bg-white rounded-full p-1.5 shadow-lg">
+                        <div id="profile-avatar" class="w-full h-full bg-indigo-100 rounded-full flex items-center justify-center text-4xl font-bold text-indigo-600 border border-indigo-200">
+                            ME
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pl-36 pt-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                        <div class="flex gap-2 items-baseline">
+                            <h1 id="firstname" class="text-3xl font-bold text-slate-900">Student</h1>
+                            <h1 id="lastname" class="text-3xl font-bold text-slate-900">Name</h1>
+                        </div>
+                        <p class="text-slate-500 font-medium"><span id="branch_">Branch</span> • <span id="year_">Year</span></p>
+                        <p class="text-slate-500 font-medium text-sm mt-1"><i class="fa-solid fa-location-dot mr-1"></i> BIT Bangalore</p>
+                        
+                        <div class="flex flex-col gap-1 mt-2">
+                            <p id="email_" class="text-slate-500 text-sm"><i class="fa-solid fa-envelope mr-2"></i>email@example.com</p>
+                            <p id="phone_" class="text-slate-500 text-sm"><i class="fa-solid fa-phone mr-2"></i>+91 XXXXX XXXXX</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-3">
+                        <button onclick="openEditModal()" class="px-4 py-2 bg-white text-indigo-600 border border-indigo-200 rounded-lg font-semibold hover:bg-indigo-50 transition shadow-sm">
+                            <i class="fa-solid fa-pen mr-2"></i>Edit Profile
+                        </button>
+                        <button onclick="handleLogout()" class="px-4 py-2 bg-red-50 text-red-600 border border-red-100 rounded-lg font-semibold hover:bg-red-100 transition">
+                            Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            
+            <div class="space-y-6">
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+                    <h3 class="font-bold text-slate-900 mb-4">Reputation</h3>
+                    
+                    <div class="flex items-end gap-3 mb-2">
+                        <span class="text-5xl font-bold text-indigo-600">4.9</span>
+                        <div class="mb-1">
+                            <div class="text-yellow-400 text-sm">
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star-half-stroke"></i>
+                            </div>
+                            <p class="text-slate-400 text-xs">Average Rating</p>
+                        </div>
+                    </div>
+                    
+                    <p class="text-slate-500 text-sm mb-6">Based on <span class="font-bold text-slate-700">12</span> gigs completed</p>
+                    
+                    <div class="space-y-4 border-t border-slate-100 pt-4">
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-xs font-bold text-slate-600 uppercase">Reliability</span>
+                                <span class="text-xs font-bold text-green-600">100%</span>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-full h-2">
+                                <div class="bg-green-500 h-2 rounded-full" style="width: 100%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-xs font-bold text-slate-600 uppercase">On Time</span>
+                                <span class="text-xs font-bold text-indigo-600">92%</span>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-full h-2">
+                                <div class="bg-indigo-500 h-2 rounded-full" style="width: 92%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="md:col-span-2">
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm h-full">
+                    <div class="p-6 border-b border-slate-100 flex justify-between items-center">
+                        <h3 class="font-bold text-slate-900">Skills & Interests</h3>
+                        <button onclick="openEditModal()" class="text-indigo-600 text-sm font-semibold hover:underline">Edit</button>
+                    </div>
+            
+                    <div class="divide-y divide-slate-100">
+                        <div class="p-6 hover:bg-slate-50 transition group">
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600">
+                                        <i class="fa-solid fa-code"></i>
+                                    </div>
+                                    <div>
+                                        <h4 id="interest1" class="font-bold text-slate-800">Skill 1</h4>
+                                        <p class="text-slate-400 text-xs">Primary Skill</p>
+                                    </div>
+                                </div>
+                                <span class="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-xs font-bold">Advanced</span>
+                            </div>
+                        </div>
+
+                        <div class="p-6 hover:bg-slate-50 transition group">
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-10 h-10 rounded-full bg-purple-50 flex items-center justify-center text-purple-600">
+                                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                    </div>
+                                    <div>
+                                        <h4 id="interest2" class="font-bold text-slate-800">Skill 2</h4>
+                                        <p class="text-slate-400 text-xs">Secondary Skill</p>
+                                    </div>
+                                </div>
+                                <span class="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-xs font-bold">Intermediate</span>
+                            </div>
+                        </div>
+
+                        <div class="p-6 hover:bg-slate-50 transition group">
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center text-green-600">
+                                        <i class="fa-solid fa-leaf"></i>
+                                    </div>
+                                    <div>
+                                        <h4 id="interest3" class="font-bold text-slate-800">Skill 3</h4>
+                                        <p class="text-slate-400 text-xs">Interest</p>
+                                    </div>
+                                </div>
+                                <span class="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-xs font-bold">Enthusiast</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="editProfileModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center backdrop-blur-sm">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg m-4 overflow-hidden fade-in">
+            <div class="bg-indigo-600 p-4 flex justify-between items-center">
+                <h3 class="text-white font-bold text-lg">Edit Profile</h3>
+                <button onclick="closeEditModal()" class="text-white hover:bg-indigo-700 rounded-full w-8 h-8 flex items-center justify-center transition">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="p-6 max-h-[80vh] overflow-y-auto">
+                <form onsubmit="saveProfile(event)">
+                    <h4 class="font-bold text-slate-800 mb-3 border-b pb-1">Personal Details</h4>
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">First Name</label>
+                            <input id="edit-firstname" type="text" class="w-full border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-indigo-500 outline-none" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">Last Name</label>
+                            <input id="edit-lastname" type="text" class="w-full border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-indigo-500 outline-none" required>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">Branch</label>
+                            <input id="edit-branch" type="text" class="w-full border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-indigo-500 outline-none" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">Year</label>
+                            <input id="edit-year" type="text" class="w-full border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-indigo-500 outline-none" required>
+                        </div>
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-xs font-bold text-slate-500 mb-1">Phone Number</label>
+                        <input id="edit-phone" type="text" class="w-full border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-indigo-500 outline-none" required>
+                    </div>
+
+                    <h4 class="font-bold text-slate-800 mb-3 border-b pb-1">Skills & Interests</h4>
+                    <div class="space-y-3 mb-6">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">Primary Skill</label>
+                            <input id="edit-skill1" type="text" class="w-full border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-indigo-500 outline-none" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">Secondary Skill</label>
+                            <input id="edit-skill2" type="text" class="w-full border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-indigo-500 outline-none" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">Interest / Hobby</label>
+                            <input id="edit-skill3" type="text" class="w-full border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-indigo-500 outline-none" required>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-3">
+                        <button type="button" onclick="closeEditModal()" class="flex-1 py-2 border border-slate-300 text-slate-600 rounded-lg font-bold hover:bg-slate-50 transition">Cancel</button>
+                        <button type="submit" class="flex-1 py-2 bg-indigo-600 text-white rounded-lg font-bold hover:bg-indigo-700 transition shadow-lg">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="fixed bottom-5 right-5 bg-green-600 text-white px-6 py-4 rounded-xl shadow-2xl transform translate-y-24 transition-transform duration-300 flex items-center gap-3 z-50">
+        <i class="fa-solid fa-circle-check text-xl"></i>
+        <div>
+            <h4 class="font-bold">Profile Updated!</h4>
+            <p class="text-sm text-green-100">Your changes have been saved.</p>
+        </div>
+    </div>
+
+    <script>
+    let currentUser = null;
+
+    window.onload = async function() {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) {
+            window.location.href = 'index.html';
+            return;
+        }
+        currentUser = session.user;
+        loadProfileData();
+    };
+
+    async function loadProfileData() {
+        // Fetch from 'profiles' table
+        const { data: user, error } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', currentUser.id)
+            .single();
+
+        if (user) {
+            document.getElementById('firstname').innerText = user.first_name || 'Student';
+            document.getElementById('lastname').innerText = user.last_name || '';
+            document.getElementById('branch_').innerText = user.branch || 'Engineering';
+            document.getElementById('year_').innerText = user.year || '1st Year';
+            document.getElementById('email_').innerText = user.email || 'No email';
+            document.getElementById('phone_').innerText = user.phone || 'No phone';
+
+            // Skills
+            const s1 = user.skills && user.skills[0] ? user.skills[0] : "None";
+            const s2 = user.skills && user.skills[1] ? user.skills[1] : "None";
+            const s3 = user.skills && user.skills[2] ? user.skills[2] : "None";
+
+            document.getElementById('interest1').innerText = s1;
+            document.getElementById('interest2').innerText = s2;
+            document.getElementById('interest3').innerText = s3;
+
+            // Initials
+            if (user.first_name) {
+                const initials = (user.first_name.charAt(0) + (user.last_name ? user.last_name.charAt(0) : '')).toUpperCase();
+                document.getElementById('profile-avatar').innerText = initials;
+            }
+        }
+    }
+
+    function openEditModal() {
+        // In this simplified version, we just reload current data into inputs
+        // You would need to add logic to populate inputs similar to loadProfileData
+        document.getElementById('editProfileModal').classList.remove('hidden');
+    }
+
+    function closeEditModal() {
+        document.getElementById('editProfileModal').classList.add('hidden');
+    }
+
+    async function saveProfile(e) {
+        e.preventDefault();
+        
+        const updates = {
+            first_name: document.getElementById('edit-firstname').value,
+            last_name: document.getElementById('edit-lastname').value,
+            branch: document.getElementById('edit-branch').value,
+            year: document.getElementById('edit-year').value,
+            phone: document.getElementById('edit-phone').value,
+            skills: [
+                document.getElementById('edit-skill1').value,
+                document.getElementById('edit-skill2').value,
+                document.getElementById('edit-skill3').value
+            ]
+        };
+
+        const { error } = await supabase
+            .from('profiles')
+            .update(updates)
+            .eq('id', currentUser.id);
+
+        if (!error) {
+            loadProfileData();
+            closeEditModal();
+            const toast = document.getElementById('toast');
+            toast.classList.remove('translate-y-24');
+            setTimeout(() => toast.classList.add('translate-y-24'), 3000);
+        } else {
+            alert(error.message);
+        }
+    }
+
+    async function handleLogout() {
+        await supabase.auth.signOut();
+        window.location.href = 'index.html';
+    }
+    </script>
+
+</body>
+</html>
